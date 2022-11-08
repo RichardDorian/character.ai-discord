@@ -45,7 +45,7 @@ function onInteraction<T extends Interaction>(interaction: T) {
           'An error occured, please refeer to an administrator.\nError: `No handler for this interaction`',
       });
     console.warn(
-      `Received an chat input interaction with name ${name} but no handler were found`
+      `Received an interaction with name ${name} but no handler were found`
     );
     return;
   }
