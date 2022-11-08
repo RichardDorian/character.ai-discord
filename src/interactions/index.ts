@@ -1,8 +1,9 @@
-import { Client, ChatInputCommandInteraction, Interaction } from 'discord.js';
+import { Client, Interaction } from 'discord.js';
 
 import * as commands from './commands';
 import buttons from './buttons';
 import contextMenus from './contextMenus';
+import modals from './modals';
 
 export function registerInteractionHandlers(client: Client) {
   client.on('interactionCreate', onInteraction);
@@ -16,17 +17,19 @@ function onInteraction<T extends Interaction>(interaction: T) {
   let name = '';
   let handlers: { [key: string]: (interaction: T) => void } = {};
 
-  if (interaction.isCommand()) {
+  if (interaction.isModalSubmit()) {
+    name = interaction.customId;
+    // @ts-ignore
+    handlers = modals;
+  } else if (interaction.isChatInputCommand()) {
     name = interaction.commandName;
     // @ts-ignore
     handlers = commands;
-  }
-  if (interaction.isButton()) {
+  } else if (interaction.isButton()) {
     name = interaction.customId;
     // @ts-ignore
     handlers = buttons;
-  }
-  if (interaction.isContextMenuCommand()) {
+  } else if (interaction.isContextMenuCommand()) {
     name = interaction.commandName;
     // @ts-ignore
     handlers = contextMenus;
